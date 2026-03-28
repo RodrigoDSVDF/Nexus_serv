@@ -126,7 +126,7 @@
 
     <canvas id="bg-canvas"></canvas>
 
-    <!-- Navbar -->
+    <!-- Navbar complementada com mais links -->
     <nav class="fixed w-full z-50 py-5 px-6 md:px-12 flex justify-between items-center bg-black/50 backdrop-blur-xl border-b border-white/5">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-400 to-purple-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
@@ -136,6 +136,8 @@
         </div>
         <div class="flex gap-5 items-center">
             <a href="#projetos" class="hidden md:block text-sm font-medium text-slate-300 hover:text-cyan-400 transition">Cases</a>
+            <a href="#clientes-destaque" class="hidden md:block text-sm font-medium text-slate-300 hover:text-cyan-400 transition">Clientes</a>
+            <a href="#tecnologias" class="hidden md:block text-sm font-medium text-slate-300 hover:text-cyan-400 transition">Tecnologias</a>
             <a href="#contato" class="text-sm font-semibold border border-cyan-500/40 hover:bg-cyan-500/10 px-5 py-2 rounded-full transition-all duration-200">
                 Área do Cliente
             </a>
@@ -401,8 +403,8 @@
         </div>
     </section>
 
-    <!-- NOVA SEÇÃO: CASES DE CLIENTES (biancapsi e craveiroadv - DOMÍNIOS CORRIGIDOS) -->
-    <section class="py-28 px-6 bg-black/30">
+    <!-- NOVA SEÇÃO: CASES DE CLIENTES (biancapsi e craveiroadv) -->
+    <section id="clientes-destaque" class="py-28 px-6 bg-black/30">
         <div class="container mx-auto max-w-6xl">
             <div class="text-center mb-16 fade-up">
                 <div class="inline-flex items-center gap-2 bg-purple-500/10 rounded-full px-4 py-1.5 border border-purple-500/30 mb-5">
@@ -413,7 +415,7 @@
                 <p class="text-slate-400 max-w-2xl mx-auto text-lg">Soluções personalizadas que transformaram a presença digital e os resultados de negócios reais.</p>
             </div>
             <div class="grid md:grid-cols-2 gap-10">
-                <!-- Card Bianca Psi (domínio corrigido: biancapsi.nexus-manual.com.br) -->
+                <!-- Card Bianca Psi -->
                 <div class="glass-card p-8 rounded-3xl transition-all hover:scale-[1.02] fade-up">
                     <div class="flex items-center gap-4 mb-6">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center shadow-lg">
@@ -436,7 +438,7 @@
                     </a>
                 </div>
 
-                <!-- Card Craveiro Adv (domínio corrigido: craveiroadv.nexus-manual.com.br) -->
+                <!-- Card Craveiro Adv -->
                 <div class="glass-card p-8 rounded-3xl transition-all hover:scale-[1.02] fade-up">
                     <div class="flex items-center gap-4 mb-6">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg">
@@ -471,7 +473,6 @@
                 <p class="text-slate-400 max-w-2xl mx-auto">Resultados reais que transformaram negócios e geraram crescimento sustentável.</p>
             </div>
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- Depoimento 1 -->
                 <div class="glass-card p-8 rounded-2xl fade-up">
                     <div class="flex items-center gap-4 mb-6">
                         <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Avatar" class="w-14 h-14 rounded-full object-cover border-2 border-cyan-400">
@@ -483,7 +484,6 @@
                     <i data-lucide="quote" class="w-8 h-8 text-cyan-400/30 mb-4"></i>
                     <p class="text-slate-300 leading-relaxed">"A Nexus Manual não só construiu meu site, mas estruturou todo o processo de captação de pacientes. Hoje minha agenda está sempre cheia e o atendimento é automatizado. Mudou completamente meu negócio."</p>
                 </div>
-                <!-- Depoimento 2 -->
                 <div class="glass-card p-8 rounded-2xl fade-up">
                     <div class="flex items-center gap-4 mb-6">
                         <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Avatar" class="w-14 h-14 rounded-full object-cover border-2 border-purple-400">
@@ -495,7 +495,6 @@
                     <i data-lucide="quote" class="w-8 h-8 text-purple-400/30 mb-4"></i>
                     <p class="text-slate-300 leading-relaxed">"A parceria com a Nexus Manual elevou nosso posicionamento digital. O fluxo de leads qualificados triplicou e conseguimos automatizar o primeiro contato com potenciais clientes. Profissionalismo impecável."</p>
                 </div>
-                <!-- Depoimento 3 -->
                 <div class="glass-card p-8 rounded-2xl fade-up">
                     <div class="flex items-center gap-4 mb-6">
                         <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Avatar" class="w-14 h-14 rounded-full object-cover border-2 border-cyan-400">
@@ -511,8 +510,8 @@
         </div>
     </section>
 
-    <!-- Seção de tecnologias & diferenciais -->
-    <section class="py-20 px-6 border-y border-white/5 bg-black/30">
+    <!-- Seção de tecnologias & diferenciais (com id para link) -->
+    <section id="tecnologias" class="py-20 px-6 border-y border-white/5 bg-black/30">
         <div class="container mx-auto max-w-5xl text-center">
             <h3 class="text-3xl font-bold mb-10 fade-up">Tecnologias que impulsionam <span class="text-cyan-400">nossos projetos</span></h3>
             <div class="flex flex-wrap justify-center gap-8 opacity-80">
@@ -680,7 +679,7 @@
         });
         animate();
 
-        // WhatsApp handler com o número solicitado: 6198377-3112 (código país 55, DDD 61)
+        // WhatsApp handler
         function handleWhatsApp() {
             const text = "Olá! Gostaria de agendar um diagnóstico estratégico e saber mais sobre os projetos Nexus (app/financeiro).";
             window.open(`https://wa.me/5561983773112?text=${encodeURIComponent(text)}`, '_blank');
@@ -710,4 +709,4 @@
         faders.forEach(fader => appearOnScroll.observe(fader));
     </script>
 </body>
-    </html>
+                    </html>
