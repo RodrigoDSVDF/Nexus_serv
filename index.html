@@ -5,14 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Nexus Manual | Ecossistema de Performance & Cases</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Three.js Core -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
-        /* ===== VARIÁVEIS E RESET ===== */
         :root {
             --nexus-blue: #4cc9f0;
+            --nexus-purple: #7209b7;
             --nexus-dark: #010101;
+            --glass-border: rgba(255, 255, 255, 0.05);
         }
         * {
             margin: 0;
@@ -25,27 +27,24 @@
             color: #f1f5f9;
             overflow-x: hidden;
         }
-        /* ===== FUNDO THREE.JS ===== */
         canvas#bg-canvas {
             position: fixed;
             top: 0;
             left: 0;
             z-index: -2;
-            opacity: 0.85; /* Aumentado para mais visibilidade */
+            opacity: 0.55;
             pointer-events: none;
         }
-        /* ===== TEXTOS GRADIENTE ===== */
         .text-gradient {
-            background: linear-gradient(125deg, #4cc9f0 0%, #2c7da0 70%, #1f567d 100%);
+            background: linear-gradient(125deg, #4cc9f0 0%, #9b5de5 70%, #f15fbb 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        /* ===== CARDS COM VIDRO ===== */
         .glass-card {
             background: rgba(12, 18, 28, 0.65);
             backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
             transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
         .glass-card:hover {
@@ -53,17 +52,16 @@
             transform: translateY(-6px);
             box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(76, 201, 240, 0.2);
         }
-        /* ===== BOTÕES ===== */
         .btn-nexus {
-            background: linear-gradient(95deg, #4cc9f0, #2c7da0);
+            background: linear-gradient(95deg, #4cc9f0, #7209b7);
             transition: all 0.3s ease;
+            background-size: 120% auto;
         }
         .btn-nexus:hover {
             transform: scale(1.02);
             box-shadow: 0 10px 30px -10px #4cc9f0;
             filter: brightness(1.05);
         }
-        /* ===== CARDS DE PROJETOS ===== */
         .project-card {
             background: rgba(8, 12, 22, 0.7);
             backdrop-filter: blur(12px);
@@ -72,50 +70,12 @@
         }
         .project-card:hover {
             border-color: #4cc9f0;
-            transform: translateY(-8px);
             box-shadow: 0 20px 35px -15px rgba(76, 201, 240, 0.25);
         }
-        /* ===== FAIXA HORIZONTAL (TICKER) ===== */
-        .ticker {
-            overflow: hidden;
-            white-space: nowrap;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            border-top: 1px solid rgba(76, 201, 240, 0.2);
-            border-bottom: 1px solid rgba(76, 201, 240, 0.2);
-            padding: 1rem 0;
+        .badge-glow {
+            background: rgba(76, 201, 240, 0.12);
+            border-left: 3px solid #4cc9f0;
         }
-        .ticker-content {
-            display: inline-block;
-            animation: scrollTicker 18s linear infinite; /* Mais rápido: 18s */
-        }
-        .ticker-content span {
-            display: inline-block;
-            margin: 0 2rem;
-            font-weight: 500;
-            letter-spacing: 1px;
-            font-size: 0.9rem;
-            color: #cbd5e1;
-        }
-        .ticker-content i {
-            margin-right: 0.5rem;
-            color: #4cc9f0;
-        }
-        @keyframes scrollTicker {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        /* ===== ANIMAÇÃO DE ENTRADA ===== */
-        .fade-up {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-        .fade-up.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        /* ===== SCROLLBAR ===== */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -126,301 +86,477 @@
             background: #4cc9f0;
             border-radius: 12px;
         }
-        /* ===== RESPONSIVIDADE ===== */
-        @media (max-width: 768px) {
-            .ticker-content span {
-                font-size: 0.7rem;
-                margin: 0 1rem;
-            }
-            .project-card .text-xl {
-                font-size: 1.2rem;
-            }
-            .btn-nexus, .glass-card a {
-                font-size: 0.9rem;
-            }
+        .stat-number {
+            text-shadow: 0 0 15px rgba(76, 201, 240, 0.3);
+        }
+
+        /* Animações de entrada */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Ícones flutuantes */
+        .floating-icon {
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Pulsação suave para CTAs */
+        .pulse-slow {
+            animation: pulse 2.5s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(76, 201, 240, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(76, 201, 240, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(76, 201, 240, 0); }
         }
     </style>
 </head>
 <body>
 
-    <!-- CANVAS PARA FUNDO THREE.JS (PARTÍCULAS) -->
     <canvas id="bg-canvas"></canvas>
 
-    <!-- ===== NAVBAR ===== -->
-    <nav class="fixed w-full z-50 py-4 md:py-5 px-4 md:px-12 flex justify-between items-center bg-black/50 backdrop-blur-xl border-b border-white/5">
-        <div class="flex items-center gap-2 md:gap-3">
-            <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
-                <i data-lucide="sparkles" class="w-4 h-4 md:w-5 md:h-5 text-white"></i>
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 py-5 px-6 md:px-12 flex justify-between items-center bg-black/50 backdrop-blur-xl border-b border-white/5">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-400 to-purple-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
             </div>
-            <span class="text-xl md:text-2xl font-bold tracking-tighter">NEXUS <span class="font-light text-cyan-300">MANUAL</span></span>
+            <span class="text-2xl font-bold tracking-tighter">NEXUS <span class="font-light text-cyan-300">MANUAL</span></span>
         </div>
-        <div class="flex gap-3 md:gap-5 items-center">
-            <a href="#projetos" class="hidden sm:block text-xs md:text-sm font-medium text-slate-300 hover:text-cyan-400 transition">Cases</a>
-            <a href="#contato" class="text-xs md:text-sm font-semibold border border-cyan-500/40 hover:bg-cyan-500/10 px-3 py-1.5 md:px-5 md:py-2 rounded-full transition-all duration-200">
+        <div class="flex gap-5 items-center">
+            <a href="#projetos" class="hidden md:block text-sm font-medium text-slate-300 hover:text-cyan-400 transition">Cases</a>
+            <a href="#contato" class="text-sm font-semibold border border-cyan-500/40 hover:bg-cyan-500/10 px-5 py-2 rounded-full transition-all duration-200">
                 Área do Cliente
             </a>
         </div>
     </nav>
 
-    <!-- ===== HERO SECTION ===== -->
-    <section class="relative min-h-screen flex flex-col justify-center items-center px-4 md:px-6 pt-24 pb-16">
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex flex-col justify-center items-center px-6 pt-24">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="hero-glow w-[60vw] h-[60vh] bg-cyan-500/5 blur-[120px] rounded-full top-1/4 left-1/2 -translate-x-1/2"></div>
+        </div>
         <div class="container mx-auto text-center z-10">
-            <div class="inline-flex items-center gap-2 bg-white/5 rounded-full px-3 py-1 md:px-4 md:py-1.5 border border-white/10 mb-6 md:mb-8 backdrop-blur-sm">
-                <i data-lucide="zap" class="w-3 h-3 md:w-4 md:h-4 text-cyan-400"></i>
-                <span class="text-[10px] md:text-xs font-mono tracking-wide">ECOSSISTEMA DE ALTA PERFORMANCE</span>
+            <div class="inline-flex items-center gap-2 bg-white/5 rounded-full px-4 py-1.5 border border-white/10 mb-8 backdrop-blur-sm">
+                <i data-lucide="zap" class="w-4 h-4 text-cyan-400"></i>
+                <span class="text-xs font-mono tracking-wide">ECOSSISTEMA DE ALTA PERFORMANCE</span>
             </div>
-            <h1 class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold mb-4 md:mb-6 tracking-tight leading-[1.1]">
+            <h1 class="text-5xl md:text-8xl font-extrabold mb-6 tracking-tight leading-[1.1]">
                 O Manual do seu <br>
                 <span class="text-gradient">Sucesso Digital</span>
             </h1>
-            <p class="text-base md:text-xl lg:text-2xl text-slate-300 mb-8 md:mb-12 max-w-3xl mx-auto font-light leading-relaxed px-2">
-                Tecnologia, dados e estratégia que conectam seu negócio a resultados exponenciais.
+            <p class="text-lg md:text-2xl text-slate-300 mb-12 max-w-3xl mx-auto font-light leading-relaxed">
+                Tecnologia, dados e estratégia que conectam seu negócio a resultados exponenciais. 
                 Não somos uma agência comum — somos arquitetos de revenue.
             </p>
-            <div class="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center">
-                <button onclick="handleWhatsApp()" class="btn-nexus px-6 md:px-10 py-3 md:py-5 rounded-full font-bold text-sm md:text-lg shadow-2xl shadow-cyan-500/30 flex items-center justify-center gap-2 transition-all">
+            <div class="flex flex-col md:flex-row gap-6 justify-center">
+                <button onclick="handleWhatsApp()" class="btn-nexus px-10 py-5 rounded-full font-bold text-lg shadow-2xl shadow-cyan-500/30 flex items-center justify-center gap-2 transition-all pulse-slow">
                     DIAGNÓSTICO GRATUITO
-                    <i data-lucide="arrow-right" class="w-4 h-4 md:w-5 md:h-5"></i>
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
                 </button>
-                <a href="#projetos" class="px-6 md:px-10 py-3 md:py-5 rounded-full font-bold text-sm md:text-lg border border-white/15 hover:bg-white/5 backdrop-blur-sm transition-all flex items-center gap-2 justify-center">
+                <a href="#projetos" class="px-10 py-5 rounded-full font-bold text-lg border border-white/15 hover:bg-white/5 backdrop-blur-sm transition-all flex items-center gap-2">
                     Ver Cases Reais
                     <i data-lucide="folder-git-2" class="w-4 h-4"></i>
                 </a>
             </div>
         </div>
-
-        <!-- STATS -->
-        <div class="container mx-auto mt-16 md:mt-28 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 z-10 px-4">
-            <div class="text-center glass-card py-3 md:py-5 rounded-2xl">
-                <div class="text-xl md:text-3xl font-extrabold text-cyan-400 mb-1 stat-number">+1.2M</div>
-                <div class="text-[10px] md:text-xs uppercase tracking-widest text-slate-400">Leads Qualificados</div>
+        
+        <!-- Stats -->
+        <div class="container mx-auto mt-28 grid grid-cols-2 md:grid-cols-4 gap-8 z-10 px-6">
+            <div class="text-center glass-card py-5 rounded-2xl fade-up">
+                <div class="text-3xl font-extrabold text-cyan-400 mb-1 stat-number">+1.2M</div>
+                <div class="text-xs uppercase tracking-widest text-slate-400">Leads Qualificados</div>
             </div>
-            <div class="text-center glass-card py-3 md:py-5 rounded-2xl">
-                <div class="text-xl md:text-3xl font-extrabold text-blue-400 mb-1 stat-number">R$ 8.4M+</div>
-                <div class="text-[10px] md:text-xs uppercase tracking-widest text-slate-400">ROI Gerido em Ads</div>
+            <div class="text-center glass-card py-5 rounded-2xl fade-up">
+                <div class="text-3xl font-extrabold text-purple-400 mb-1 stat-number">R$ 8.4M+</div>
+                <div class="text-xs uppercase tracking-widest text-slate-400">ROI Gerido em Ads</div>
             </div>
-            <div class="text-center glass-card py-3 md:py-5 rounded-2xl">
-                <div class="text-xl md:text-3xl font-extrabold text-cyan-400 mb-1 stat-number">99%</div>
-                <div class="text-[10px] md:text-xs uppercase tracking-widest text-slate-400">Satisfação Clientes</div>
+            <div class="text-center glass-card py-5 rounded-2xl fade-up">
+                <div class="text-3xl font-extrabold text-cyan-400 mb-1 stat-number">99%</div>
+                <div class="text-xs uppercase tracking-widest text-slate-400">Satisfação Clientes</div>
             </div>
-            <div class="text-center glass-card py-3 md:py-5 rounded-2xl">
-                <div class="text-xl md:text-3xl font-extrabold text-blue-400 mb-1 stat-number">24/7</div>
-                <div class="text-[10px] md:text-xs uppercase tracking-widest text-slate-400">Suporte Estratégico</div>
+            <div class="text-center glass-card py-5 rounded-2xl fade-up">
+                <div class="text-3xl font-extrabold text-purple-400 mb-1 stat-number">24/7</div>
+                <div class="text-xs uppercase tracking-widest text-slate-400">Suporte Estratégico</div>
             </div>
         </div>
     </section>
 
-    <!-- ===== FAIXA HORIZONTAL (TICKER) ===== -->
-    <div class="ticker">
-        <div class="ticker-content">
-            <span><i data-lucide="facebook" class="inline w-4 h-4"></i> Meta Ads</span>
-            <span><i data-lucide="google" class="inline w-4 h-4"></i> Google Ads</span>
-            <span><i data-lucide="layout-template" class="inline w-4 h-4"></i> Landing Page</span>
-            <span><i data-lucide="bar-chart-2" class="inline w-4 h-4"></i> Análise de Dados</span>
-            <span><i data-lucide="dashboard" class="inline w-4 h-4"></i> Dashboard</span>
-            <!-- Duplicação para loop infinito -->
-            <span><i data-lucide="facebook" class="inline w-4 h-4"></i> Meta Ads</span>
-            <span><i data-lucide="google" class="inline w-4 h-4"></i> Google Ads</span>
-            <span><i data-lucide="layout-template" class="inline w-4 h-4"></i> Landing Page</span>
-            <span><i data-lucide="bar-chart-2" class="inline w-4 h-4"></i> Análise de Dados</span>
-            <span><i data-lucide="dashboard" class="inline w-4 h-4"></i> Dashboard</span>
-        </div>
-    </div>
-
-    <!-- ===== SEÇÃO DE PROJETOS ===== -->
-    <section id="projetos" class="py-16 md:py-28 px-4 md:px-6 relative">
+    <!-- Problema + Solução -->
+    <section class="py-28 px-6">
         <div class="container mx-auto max-w-6xl">
-            <div class="text-center mb-12 md:mb-16 fade-up">
-                <div class="inline-flex items-center gap-2 bg-cyan-500/10 rounded-full px-3 py-1 md:px-4 md:py-1.5 border border-cyan-500/30 mb-4 md:mb-5">
-                    <i data-lucide="briefcase" class="w-3 h-3 md:w-4 md:h-4 text-cyan-400"></i>
-                    <span class="text-[10px] md:text-xs font-bold tracking-wider text-cyan-300">PORTFÓLIO NEXUS</span>
-                </div>
-                <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-5">Projetos que <span class="text-gradient">redefinem o digital</span></h2>
-                <p class="text-slate-400 max-w-2xl mx-auto text-sm md:text-lg px-2">Soluções end-to-end desenvolvidas pela Nexus Manual — ecossistemas próprios que impulsionam receita e eficiência operacional.</p>
-            </div>
-
-            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                <!-- Card 1: app.nexus-manual.com.br -->
-                <div class="project-card rounded-2xl md:rounded-3xl overflow-hidden fade-up">
-                    <div class="p-5 md:p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="bg-cyan-500/15 rounded-xl p-2">
-                                <i data-lucide="smartphone" class="w-6 h-6 md:w-8 md:h-8 text-cyan-400"></i>
+            <div class="grid md:grid-cols-2 gap-20 items-center">
+                <div class="fade-up">
+                    <span class="text-cyan-400 text-sm font-semibold tracking-wider">DIAGNÓSTICO DIGITAL</span>
+                    <h2 class="text-4xl md:text-6xl font-bold mt-3 mb-8 leading-tight">
+                        Seu digital está travado? <br> <span class="opacity-40">A culpa não é do mercado.</span>
+                    </h2>
+                    <div class="space-y-8">
+                        <div class="flex gap-6">
+                            <div class="shrink-0 w-12 h-12 rounded-2xl bg-red-500/15 flex items-center justify-center">
+                                <i data-lucide="eye-off" class="text-red-400 w-6 h-6"></i>
                             </div>
-                            <span class="text-[10px] md:text-xs font-mono px-2 py-1 rounded-full bg-white/5 border border-white/10">Plataforma Live</span>
+                            <div>
+                                <h4 class="text-xl font-bold mb-2">Invisibilidade Estratégica</h4>
+                                <p class="text-slate-400">Anúncios genéricos e conteúdo sem funil. Sem rastreio avançado, você compete no escuro.</p>
+                            </div>
                         </div>
-                        <h3 class="text-xl md:text-2xl font-bold mb-2">app.nexus-manual.com.br</h3>
-                        <div class="flex flex-wrap gap-1 md:gap-2 mb-4">
-                            <span class="text-[10px] md:text-xs bg-cyan-950/50 text-cyan-300 px-2 py-1 rounded-full">CRM + Automação</span>
-                            <span class="text-[10px] md:text-xs bg-blue-950/50 text-blue-300 px-2 py-1 rounded-full">WhatsApp API</span>
+                        <div class="flex gap-6">
+                            <div class="shrink-0 w-12 h-12 rounded-2xl bg-orange-500/15 flex items-center justify-center">
+                                <i data-lucide="bar-chart-2" class="text-orange-400 w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold mb-2">Decisões baseadas em achismo</h4>
+                                <p class="text-slate-400">Sem dados estruturados, cada real investido vira incerteza. Nós estruturamos a inteligência de ponta a ponta.</p>
+                            </div>
                         </div>
-                        <p class="text-slate-300 text-xs md:text-sm leading-relaxed mb-5">
-                            Gestão comercial com funil, automação de follow-up e análise preditiva. +47% de conversão.
-                        </p>
-                        <div class="flex gap-3">
-                            <button onclick="window.open('https://app.nexus-manual.com.br', '_blank')" class="text-xs md:text-sm font-semibold bg-white/5 border border-white/10 px-3 py-1.5 md:px-4 md:py-2 rounded-full hover:bg-cyan-500/10 transition-all flex items-center gap-1">
-                                Acessar <i data-lucide="external-link" class="w-3 h-3"></i>
-                            </button>
-                            <button onclick="handleWhatsApp()" class="text-xs md:text-sm font-semibold text-cyan-300 hover:text-white transition">Saber mais →</button>
+                        <div class="flex gap-6">
+                            <div class="shrink-0 w-12 h-12 rounded-2xl bg-blue-500/15 flex items-center justify-center">
+                                <i data-lucide="smartphone" class="text-blue-400 w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold mb-2">Falta de ecossistema próprio</h4>
+                                <p class="text-slate-400">Plataformas desconectadas matam a experiência do cliente. Criamos soluções como app.nexus e financeiro.nexus.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Card 2: financeiro.nexus-manual.com.br -->
-                <div class="project-card rounded-2xl md:rounded-3xl overflow-hidden fade-up">
-                    <div class="p-5 md:p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="bg-blue-500/15 rounded-xl p-2">
-                                <i data-lucide="banknote" class="w-6 h-6 md:w-8 md:h-8 text-blue-400"></i>
-                            </div>
-                            <span class="text-[10px] md:text-xs font-mono px-2 py-1 rounded-full bg-white/5 border border-white/10">ERP Financeiro</span>
+                <div class="glass-card rounded-[2.5rem] p-10 border-cyan-500/20 relative fade-up">
+                    <i data-lucide="quote" class="absolute -top-5 -left-5 w-14 h-14 text-cyan-500/30"></i>
+                    <p class="text-xl md:text-2xl font-light italic leading-relaxed text-slate-200">
+                        "A Nexus Manual não apenas entregou tecnologia, mas transformou nossa operação. O app.nexus revolucionou nosso time comercial e o financeiro.nexus deu previsibilidade de caixa pela primeira vez."
+                    </p>
+                    <div class="flex items-center gap-4 mt-8 pt-4 border-t border-white/10">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600"></div>
+                        <div>
+                            <p class="font-bold">Rodrigo Almeida</p>
+                            <p class="text-sm text-slate-400">CEO, Grupo Alfa</p>
                         </div>
-                        <h3 class="text-xl md:text-2xl font-bold mb-2">financeiro.nexus-manual.com.br</h3>
-                        <div class="flex flex-wrap gap-1 md:gap-2 mb-4">
-                            <span class="text-[10px] md:text-xs bg-blue-950/50 text-blue-300 px-2 py-1 rounded-full">Fluxo de Caixa IA</span>
-                            <span class="text-[10px] md:text-xs bg-cyan-950/50 text-cyan-300 px-2 py-1 rounded-full">Conciliação Automática</span>
-                        </div>
-                        <p class="text-slate-300 text-xs md:text-sm leading-relaxed mb-5">
-                            Previsão de fluxo com machine learning, conciliação bancária instantânea e dashboards em tempo real.
-                        </p>
-                        <div class="flex gap-3">
-                            <button onclick="window.open('https://financeiro.nexus-manual.com.br', '_blank')" class="text-xs md:text-sm font-semibold bg-white/5 border border-white/10 px-3 py-1.5 md:px-4 md:py-2 rounded-full hover:bg-blue-500/10 transition-all flex items-center gap-1">
-                                Acessar <i data-lucide="external-link" class="w-3 h-3"></i>
-                            </button>
-                            <button onclick="handleWhatsApp()" class="text-xs md:text-sm font-semibold text-blue-300 hover:text-white transition">Saber mais →</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Cards placeholder (3 a 7) -->
-                <div class="project-card rounded-2xl md:rounded-3xl overflow-hidden fade-up">
-                    <div class="p-5 md:p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="bg-slate-700/50 rounded-xl p-2">
-                                <i data-lucide="construction" class="w-6 h-6 md:w-8 md:h-8 text-slate-400"></i>
-                            </div>
-                            <span class="text-[10px] md:text-xs font-mono px-2 py-1 rounded-full bg-white/5 border border-white/10">Em breve</span>
-                        </div>
-                        <h3 class="text-xl md:text-2xl font-bold mb-2">Projeto Nexus CRM 360</h3>
-                        <p class="text-slate-300 text-xs md:text-sm leading-relaxed mb-5">
-                            Plataforma unificada de relacionamento com clientes, integração total com os sistemas Nexus.
-                        </p>
-                        <div class="flex gap-3">
-                            <button class="text-xs md:text-sm font-semibold text-slate-400 cursor-not-allowed px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-white/5 border border-white/10">
-                                Em desenvolvimento
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card rounded-2xl md:rounded-3xl overflow-hidden fade-up">
-                    <div class="p-5 md:p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="bg-slate-700/50 rounded-xl p-2">
-                                <i data-lucide="bar-chart-3" class="w-6 h-6 md:w-8 md:h-8 text-slate-400"></i>
-                            </div>
-                            <span class="text-[10px] md:text-xs font-mono px-2 py-1 rounded-full bg-white/5 border border-white/10">Em breve</span>
-                        </div>
-                        <h3 class="text-xl md:text-2xl font-bold mb-2">Nexus BI Enterprise</h3>
-                        <p class="text-slate-300 text-xs md:text-sm leading-relaxed mb-5">
-                            Módulo de inteligência de negócios com dashboards preditivos e integração com dados externos.
-                        </p>
-                        <button class="text-xs md:text-sm font-semibold text-slate-400 cursor-not-allowed px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-white/5 border border-white/10">
-                            Lançamento Q3 2025
-                        </button>
-                    </div>
-                </div>
-
-                <div class="project-card rounded-2xl md:rounded-3xl overflow-hidden fade-up">
-                    <div class="p-5 md:p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="bg-slate-700/50 rounded-xl p-2">
-                                <i data-lucide="shield-check" class="w-6 h-6 md:w-8 md:h-8 text-slate-400"></i>
-                            </div>
-                            <span class="text-[10px] md:text-xs font-mono px-2 py-1 rounded-full bg-white/5 border border-white/10">Em breve</span>
-                        </div>
-                        <h3 class="text-xl md:text-2xl font-bold mb-2">Nexus Security Hub</h3>
-                        <p class="text-slate-300 text-xs md:text-sm leading-relaxed mb-5">
-                            Plataforma de cibersegurança e conformidade para empresas do ecossistema Nexus.
-                        </p>
-                        <button class="text-xs md:text-sm font-semibold text-slate-400 cursor-not-allowed px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-white/5 border border-white/10">
-                            Em desenvolvimento
-                        </button>
-                    </div>
-                </div>
-
-                <div class="project-card rounded-2xl md:rounded-3xl overflow-hidden fade-up">
-                    <div class="p-5 md:p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="bg-slate-700/50 rounded-xl p-2">
-                                <i data-lucide="bot" class="w-6 h-6 md:w-8 md:h-8 text-slate-400"></i>
-                            </div>
-                            <span class="text-[10px] md:text-xs font-mono px-2 py-1 rounded-full bg-white/5 border border-white/10">Em breve</span>
-                        </div>
-                        <h3 class="text-xl md:text-2xl font-bold mb-2">Nexus AI Agent</h3>
-                        <p class="text-slate-300 text-xs md:text-sm leading-relaxed mb-5">
-                            Assistente virtual com IA generativa para atendimento e automação de processos internos.
-                        </p>
-                        <button class="text-xs md:text-sm font-semibold text-slate-400 cursor-not-allowed px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-white/5 border border-white/10">
-                            Em breve
-                        </button>
-                    </div>
-                </div>
-
-                <div class="project-card rounded-2xl md:rounded-3xl overflow-hidden fade-up">
-                    <div class="p-5 md:p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="bg-slate-700/50 rounded-xl p-2">
-                                <i data-lucide="layers" class="w-6 h-6 md:w-8 md:h-8 text-slate-400"></i>
-                            </div>
-                            <span class="text-[10px] md:text-xs font-mono px-2 py-1 rounded-full bg-white/5 border border-white/10">Em breve</span>
-                        </div>
-                        <h3 class="text-xl md:text-2xl font-bold mb-2">Nexus Marketplace</h3>
-                        <p class="text-slate-300 text-xs md:text-sm leading-relaxed mb-5">
-                            Marketplace de soluções parceiras integradas ao ecossistema Nexus.
-                        </p>
-                        <button class="text-xs md:text-sm font-semibold text-slate-400 cursor-not-allowed px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-white/5 border border-white/10">
-                            2026
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ===== CTA FINAL ===== -->
-    <section id="contato" class="py-16 md:py-32 px-4 md:px-6">
+    <!-- Serviços -->
+    <section class="py-24 px-6 bg-gradient-to-b from-slate-900/20 to-transparent">
+        <div class="container mx-auto">
+            <div class="text-center mb-16 fade-up">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">Soluções <span class="text-cyan-400">de Elite</span></h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-cyan-400 to-purple-500 mx-auto mb-8"></div>
+                <p class="text-slate-400 max-w-2xl mx-auto">Arquitetura digital focada em escalabilidade, conversão e autonomia para negócios que querem dominar.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-3xl relative overflow-hidden fade-up floating-icon">
+                    <i data-lucide="layout-template" class="w-12 h-12 text-cyan-400 mb-5"></i>
+                    <h3 class="text-2xl font-bold mb-3">Páginas de Alta Conversão</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Landing pages e sites institucionais com arquitetura de informação testada, carregamento instantâneo e foco em CRO.</p>
+                    <ul class="space-y-2 text-sm text-slate-300">
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-400"></i> Velocidade Core Web Vitals</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-400"></i> Rastreio avançado (GA4 + GTM)</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-400"></i> Design centrado em persona</li>
+                    </ul>
+                </div>
+                <div class="glass-card p-8 rounded-3xl relative overflow-hidden border-cyan-500/20 fade-up floating-icon" style="animation-delay: 0.2s;">
+                    <i data-lucide="target" class="w-12 h-12 text-purple-400 mb-5"></i>
+                    <h3 class="text-2xl font-bold mb-3">Tráfego de Performance</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Gestão de mídia paga com foco em ROAS, pixel proprietário e otimização por dados reais.</p>
+                    <ul class="space-y-2 text-sm text-slate-300">
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-purple-400"></i> Facebook/Instagram/Google Ads</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-purple-400"></i> Automação de lances</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-purple-400"></i> Escala sustentável</li>
+                    </ul>
+                </div>
+                <div class="glass-card p-8 rounded-3xl relative overflow-hidden fade-up floating-icon" style="animation-delay: 0.4s;">
+                    <i data-lucide="database" class="w-12 h-12 text-blue-400 mb-5"></i>
+                    <h3 class="text-2xl font-bold mb-3">Data Intelligence & BI</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Dashboard gerencial, API de conversões e modelagem de dados para decisões cirúrgicas.</p>
+                    <ul class="space-y-2 text-sm text-slate-300">
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-blue-400"></i> Looker Studio + BigQuery</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-blue-400"></i> Rastreio server-side</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-blue-400"></i> Funnel analytics</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO DE PROJETOS ORIGINAL (app.nexus e financeiro.nexus) -->
+    <section id="projetos" class="py-28 px-6 relative">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center gap-2 bg-cyan-500/10 rounded-full px-4 py-1.5 border border-cyan-500/30 mb-5">
+                    <i data-lucide="briefcase" class="w-4 h-4 text-cyan-400"></i>
+                    <span class="text-xs font-bold tracking-wider text-cyan-300">PORTFÓLIO NEXUS</span>
+                </div>
+                <h2 class="text-4xl md:text-6xl font-bold mb-5">Projetos que <span class="text-gradient">redefinem o digital</span></h2>
+                <p class="text-slate-400 max-w-2xl mx-auto text-lg">Soluções end-to-end desenvolvidas pela Nexus Manual — ecossistemas próprios que impulsionam receita e eficiência operacional.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-10">
+                <!-- Card App Nexus -->
+                <div class="project-card rounded-3xl overflow-hidden transition-all fade-up">
+                    <div class="p-1 bg-gradient-to-r from-cyan-500/30 to-purple-500/30 rounded-t-3xl"></div>
+                    <div class="p-8 md:p-10">
+                        <div class="flex items-start justify-between">
+                            <div class="bg-cyan-500/15 rounded-2xl p-3">
+                                <i data-lucide="smartphone" class="w-10 h-10 text-cyan-400"></i>
+                            </div>
+                            <span class="text-xs font-mono px-3 py-1 rounded-full bg-white/5 border border-white/10">Plataforma Live</span>
+                        </div>
+                        <h3 class="text-3xl font-bold mt-6 tracking-tight">app.nexus.com.br</h3>
+                        <div class="flex flex-wrap gap-2 mt-2 mb-5">
+                            <span class="text-xs bg-cyan-950/50 text-cyan-300 px-2 py-1 rounded-full">CRM + Automação</span>
+                            <span class="text-xs bg-purple-950/50 text-purple-300 px-2 py-1 rounded-full">WhatsApp API</span>
+                            <span class="text-xs bg-slate-800 text-slate-300 px-2 py-1 rounded-full">React/Node</span>
+                        </div>
+                        <p class="text-slate-300 leading-relaxed mb-6">
+                            Sistema proprietário de gestão comercial que integra funil de vendas, automação de follow-up via WhatsApp e análise preditiva de conversão. Utilizado por mais de 45 empresas B2B para centralizar leads e aumentar produtividade do time comercial.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="badge-glow pl-4 py-2 rounded-md">
+                                <p class="text-xs text-slate-400">Aumento de conversão</p>
+                                <p class="text-xl font-bold text-cyan-300">+47%</p>
+                            </div>
+                            <div class="badge-glow pl-4 py-2 rounded-md">
+                                <p class="text-xs text-slate-400">Leads processados/mês</p>
+                                <p class="text-xl font-bold text-cyan-300">15k+</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 mt-2">
+                            <button onclick="window.open('https://app.nexus.com.br', '_blank')" class="text-sm font-semibold bg-white/5 border border-white/10 px-5 py-2.5 rounded-full hover:bg-cyan-500/10 hover:border-cyan-500/40 transition-all flex items-center gap-2">
+                                Acessar plataforma <i data-lucide="external-link" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="handleWhatsApp()" class="text-sm font-semibold text-cyan-300 hover:text-white transition">Saber mais →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Financeiro Nexus -->
+                <div class="project-card rounded-3xl overflow-hidden transition-all fade-up">
+                    <div class="p-1 bg-gradient-to-r from-purple-500/30 to-fuchsia-500/30 rounded-t-3xl"></div>
+                    <div class="p-8 md:p-10">
+                        <div class="flex items-start justify-between">
+                            <div class="bg-purple-500/15 rounded-2xl p-3">
+                                <i data-lucide="banknote" class="w-10 h-10 text-purple-400"></i>
+                            </div>
+                            <span class="text-xs font-mono px-3 py-1 rounded-full bg-white/5 border border-white/10">ERP Financeiro</span>
+                        </div>
+                        <h3 class="text-3xl font-bold mt-6 tracking-tight">financeiro.nexus.com.br</h3>
+                        <div class="flex flex-wrap gap-2 mt-2 mb-5">
+                            <span class="text-xs bg-purple-950/50 text-purple-300 px-2 py-1 rounded-full">Fluxo de Caixa IA</span>
+                            <span class="text-xs bg-cyan-950/50 text-cyan-300 px-2 py-1 rounded-full">Conciliação Automática</span>
+                            <span class="text-xs bg-slate-800 text-slate-300 px-2 py-1 rounded-full">Dashboards Preditivos</span>
+                        </div>
+                        <p class="text-slate-300 leading-relaxed mb-6">
+                            Solução completa para gestão financeira corporativa: previsão de fluxo de caixa com machine learning, conciliação bancária instantânea e relatórios gerenciais em tempo real. Desenhado para reduzir fricção operacional e dar visibilidade 360°.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="badge-glow pl-4 py-2 rounded-md">
+                                <p class="text-xs text-slate-400">Redução fechamento mensal</p>
+                                <p class="text-xl font-bold text-purple-300">-32%</p>
+                            </div>
+                            <div class="badge-glow pl-4 py-2 rounded-md">
+                                <p class="text-xs text-slate-400">Empresas integradas</p>
+                                <p class="text-xl font-bold text-purple-300">28+</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 mt-2">
+                            <button onclick="window.open('https://financeiro.nexus.com.br', '_blank')" class="text-sm font-semibold bg-white/5 border border-white/10 px-5 py-2.5 rounded-full hover:bg-purple-500/10 hover:border-purple-500/40 transition-all flex items-center gap-2">
+                                Acessar demo <i data-lucide="external-link" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="handleWhatsApp()" class="text-sm font-semibold text-purple-300 hover:text-white transition">Solicitar apresentação →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projeto extra + diferencial tecnológico (mantido) -->
+            <div class="mt-20 glass-card rounded-3xl p-8 md:p-10 flex flex-col md:flex-row gap-8 items-center justify-between border-cyan-500/15 fade-up">
+                <div class="flex gap-5 items-center">
+                    <div class="bg-white/5 rounded-full p-3">
+                        <i data-lucide="layers" class="w-8 h-8 text-cyan-400"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-2xl font-bold">Ecosistema Nexus: mais que ferramentas</h4>
+                        <p class="text-slate-400 max-w-md">app.nexus + financeiro.nexus conversam entre si via API proprietária, gerando visibilidade unificada de vendas e finanças.</p>
+                    </div>
+                </div>
+                <div class="flex gap-3 text-sm font-mono text-slate-300">
+                    <span class="px-4 py-2 bg-black/30 rounded-full border border-white/10">🏆 Case B2B</span>
+                    <span class="px-4 py-2 bg-black/30 rounded-full border border-white/10">⚡ Automação total</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NOVA SEÇÃO: CASES DE CLIENTES (bianca_psi e craveiro_adv) -->
+    <section class="py-28 px-6 bg-black/30">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16 fade-up">
+                <div class="inline-flex items-center gap-2 bg-purple-500/10 rounded-full px-4 py-1.5 border border-purple-500/30 mb-5">
+                    <i data-lucide="award" class="w-4 h-4 text-purple-400"></i>
+                    <span class="text-xs font-bold tracking-wider text-purple-300">CASES DE DESTAQUE</span>
+                </div>
+                <h2 class="text-4xl md:text-6xl font-bold mb-5">Quem confia na <span class="text-gradient">Nexus Manual</span></h2>
+                <p class="text-slate-400 max-w-2xl mx-auto text-lg">Soluções personalizadas que transformaram a presença digital e os resultados de negócios reais.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-10">
+                <!-- Card Bianca Psi -->
+                <div class="glass-card p-8 rounded-3xl transition-all hover:scale-[1.02] fade-up">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center shadow-lg">
+                            <i data-lucide="brain" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold">Bianca Psi</h3>
+                            <p class="text-slate-400">Psicologia & Saúde Mental</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-300 leading-relaxed mb-5">
+                        Desenvolvemos uma estratégia completa de conteúdo, tráfego qualificado e automação de agendamentos. A clínica aumentou em <span class="text-cyan-400 font-bold">210%</span> a captação de novos pacientes em apenas 3 meses.
+                    </p>
+                    <div class="flex flex-wrap gap-3 mb-6">
+                        <span class="text-xs bg-cyan-500/10 text-cyan-300 px-3 py-1 rounded-full">+210% Leads</span>
+                        <span class="text-xs bg-purple-500/10 text-purple-300 px-3 py-1 rounded-full">Agendamento Automático</span>
+                    </div>
+                    <a href="https://bianca_psi.nexus-manual.com.br" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition">
+                        Visitar site <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <!-- Card Craveiro Adv -->
+                <div class="glass-card p-8 rounded-3xl transition-all hover:scale-[1.02] fade-up">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg">
+                            <i data-lucide="scale" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold">Craveiro Adv</h3>
+                            <p class="text-slate-400">Direito Empresarial</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-300 leading-relaxed mb-5">
+                        Implementamos um funil digital com conteúdo estratégico e nutrição por e-mail, resultando em um aumento de <span class="text-cyan-400 font-bold">178%</span> na captação de leads qualificados para o escritório.
+                    </p>
+                    <div class="flex flex-wrap gap-3 mb-6">
+                        <span class="text-xs bg-cyan-500/10 text-cyan-300 px-3 py-1 rounded-full">ROI 4,2x</span>
+                        <span class="text-xs bg-purple-500/10 text-purple-300 px-3 py-1 rounded-full">Automação de Contato</span>
+                    </div>
+                    <a href="https://craveiro_adv.nexus-manual.com.br" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition">
+                        Visitar site <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO DE COMENTÁRIOS (DEPOIMENTOS) -->
+    <section class="py-28 px-6">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16 fade-up">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">O que dizem <span class="text-cyan-400">nossos clientes</span></h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-cyan-400 to-purple-500 mx-auto mb-8"></div>
+                <p class="text-slate-400 max-w-2xl mx-auto">Resultados reais que transformaram negócios e geraram crescimento sustentável.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Depoimento 1 -->
+                <div class="glass-card p-8 rounded-2xl fade-up">
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Avatar" class="w-14 h-14 rounded-full object-cover border-2 border-cyan-400">
+                        <div>
+                            <h4 class="font-bold">Dra. Bianca Ferreira</h4>
+                            <p class="text-sm text-slate-400">Psicóloga Clínica</p>
+                        </div>
+                    </div>
+                    <i data-lucide="quote" class="w-8 h-8 text-cyan-400/30 mb-4"></i>
+                    <p class="text-slate-300 leading-relaxed">"A Nexus Manual não só construiu meu site, mas estruturou todo o processo de captação de pacientes. Hoje minha agenda está sempre cheia e o atendimento é automatizado. Mudou completamente meu negócio."</p>
+                </div>
+                <!-- Depoimento 2 -->
+                <div class="glass-card p-8 rounded-2xl fade-up">
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Avatar" class="w-14 h-14 rounded-full object-cover border-2 border-purple-400">
+                        <div>
+                            <h4 class="font-bold">Dr. Rodrigo Craveiro</h4>
+                            <p class="text-sm text-slate-400">Sócio-Criador, Craveiro Adv</p>
+                        </div>
+                    </div>
+                    <i data-lucide="quote" class="w-8 h-8 text-purple-400/30 mb-4"></i>
+                    <p class="text-slate-300 leading-relaxed">"A parceria com a Nexus Manual elevou nosso posicionamento digital. O fluxo de leads qualificados triplicou e conseguimos automatizar o primeiro contato com potenciais clientes. Profissionalismo impecável."</p>
+                </div>
+                <!-- Depoimento 3 -->
+                <div class="glass-card p-8 rounded-2xl fade-up">
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Avatar" class="w-14 h-14 rounded-full object-cover border-2 border-cyan-400">
+                        <div>
+                            <h4 class="font-bold">Carlos M.</h4>
+                            <p class="text-sm text-slate-400">CEO, TechB2B</p>
+                        </div>
+                    </div>
+                    <i data-lucide="quote" class="w-8 h-8 text-cyan-400/30 mb-4"></i>
+                    <p class="text-slate-300 leading-relaxed">"O app.nexus revolucionou nossa gestão comercial. Reduzimos o tempo de follow-up em 60% e aumentamos a conversão em 47%. Simplesmente indispensável."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de tecnologias & diferenciais -->
+    <section class="py-20 px-6 border-y border-white/5 bg-black/30">
         <div class="container mx-auto max-w-5xl text-center">
-            <div class="glass-card p-8 md:p-12 lg:p-20 rounded-3xl md:rounded-[3rem] border-white/10 shadow-2xl fade-up">
-                <h2 class="text-3xl md:text-5xl lg:text-6xl font-black mb-4 md:mb-6 leading-tight">Pronto para construir a <br> <span class="text-gradient">próxima geração digital?</span></h2>
-                <p class="text-base md:text-xl text-slate-300 mb-8 md:mb-10 max-w-2xl mx-auto px-2">Receba um diagnóstico completo do seu ecossistema digital e entenda como app.nexus ou financeiro.nexus podem transformar seus resultados.</p>
-                <button onclick="handleWhatsApp()" class="btn-nexus px-8 md:px-12 py-4 md:py-6 rounded-full font-black text-base md:text-xl shadow-cyan-500/20 flex items-center justify-center gap-2 md:gap-3 mx-auto transition-all">
-                    <i data-lucide="message-circle" class="w-5 h-5 md:w-6 md:h-6"></i> FALAR COM ESPECIALISTA
+            <h3 class="text-3xl font-bold mb-10 fade-up">Tecnologias que impulsionam <span class="text-cyan-400">nossos projetos</span></h3>
+            <div class="flex flex-wrap justify-center gap-8 opacity-80">
+                <div class="flex flex-col items-center gap-2 floating-icon"><i data-lucide="code-2" class="w-8 h-8 text-slate-400"></i><span class="text-xs">React/Next.js</span></div>
+                <div class="flex flex-col items-center gap-2 floating-icon" style="animation-delay: 0.2s;"><i data-lucide="database" class="w-8 h-8 text-slate-400"></i><span class="text-xs">Node.js + Python</span></div>
+                <div class="flex flex-col items-center gap-2 floating-icon" style="animation-delay: 0.4s;"><i data-lucide="cloud" class="w-8 h-8 text-slate-400"></i><span class="text-xs">AWS/GCP</span></div>
+                <div class="flex flex-col items-center gap-2 floating-icon" style="animation-delay: 0.6s;"><i data-lucide="bot" class="w-8 h-8 text-slate-400"></i><span class="text-xs">IA Generativa</span></div>
+                <div class="flex flex-col items-center gap-2 floating-icon" style="animation-delay: 0.8s;"><i data-lucide="trending-up" class="w-8 h-8 text-slate-400"></i><span class="text-xs">BigQuery/ML</span></div>
+            </div>
+            <p class="text-slate-500 text-sm mt-10 max-w-2xl mx-auto fade-up">Cada projeto desenvolvido com arquitetura serverless, segurança de ponta e design focado em performance para escalar seu negócio.</p>
+        </div>
+    </section>
+
+    <!-- CTA final -->
+    <section id="contato" class="py-32 px-6">
+        <div class="container mx-auto max-w-5xl text-center">
+            <div class="glass-card p-12 md:p-20 rounded-[3rem] border-white/10 shadow-2xl fade-up">
+                <h2 class="text-4xl md:text-6xl font-black mb-6 leading-tight">Pronto para construir a <br> <span class="text-gradient">próxima geração digital?</span></h2>
+                <p class="text-xl text-slate-300 mb-10 max-w-2xl mx-auto">Receba um diagnóstico completo do seu ecossistema digital e entenda como app.nexus ou financeiro.nexus podem transformar seus resultados.</p>
+                <button onclick="handleWhatsApp()" class="btn-nexus px-12 py-6 rounded-full font-black text-xl shadow-cyan-500/20 flex items-center justify-center gap-3 mx-auto transition-all pulse-slow">
+                    <i data-lucide="message-circle" class="w-6 h-6"></i> FALAR COM ESPECIALISTA
                 </button>
-                <div class="flex flex-wrap justify-center gap-4 md:gap-6 mt-8 md:mt-12 text-xs md:text-sm text-slate-400">
-                    <span class="flex items-center gap-1"><i data-lucide="shield-check" class="w-3 h-3 md:w-4 md:h-4 text-cyan-500"></i> Dados protegidos</span>
-                    <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3 md:w-4 md:h-4 text-cyan-500"></i> Resposta < 2h</span>
+                <div class="flex justify-center gap-6 mt-12 text-sm text-slate-400">
+                    <span class="flex items-center gap-1"><i data-lucide="shield-check" class="w-4 h-4 text-cyan-500"></i> Dados protegidos</span>
+                    <span class="flex items-center gap-1"><i data-lucide="clock" class="w-4 h-4 text-cyan-500"></i> Resposta < 2h</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ===== RODAPÉ ===== -->
-    <footer class="py-8 md:py-12 border-t border-white/5 text-center">
-        <div class="opacity-50 text-[10px] md:text-sm tracking-widest uppercase mb-2 md:mb-3">NEXUS MANUAL — INNOVATION & REVENUE</div>
-        <div class="flex justify-center gap-6 md:gap-8 mb-4 md:mb-6">
-            <a href="#" class="hover:text-cyan-400 transition"><i data-lucide="instagram" class="w-4 h-4 md:w-5 md:h-5"></i></a>
-            <a href="#" class="hover:text-cyan-400 transition"><i data-lucide="linkedin" class="w-4 h-4 md:w-5 md:h-5"></i></a>
-            <a href="#" class="hover:text-cyan-400 transition"><i data-lucide="github" class="w-4 h-4 md:w-5 md:h-5"></i></a>
+    <footer class="py-12 border-t border-white/5 text-center">
+        <div class="opacity-50 text-sm tracking-widest uppercase mb-3">NEXUS MANUAL — INNOVATION & REVENUE</div>
+        <div class="flex justify-center gap-8 mb-6">
+            <a href="#" class="hover:text-cyan-400 transition"><i data-lucide="instagram"></i></a>
+            <a href="#" class="hover:text-cyan-400 transition"><i data-lucide="linkedin"></i></a>
+            <a href="#" class="hover:text-cyan-400 transition"><i data-lucide="github"></i></a>
         </div>
-        <p class="text-[10px] md:text-xs text-slate-600">© 2025 Nexus Manual - Ecossistema de tecnologia e performance. <br> app.nexus-manual.com.br | financeiro.nexus-manual.com.br</p>
+        <p class="text-xs text-slate-600">© 2025 Nexus Manual - Ecossistema de tecnologia e performance. <br> app.nexus.com.br | financeiro.nexus.com.br | bianca_psi.nexus-manual.com.br | craveiro_adv.nexus-manual.com.br</p>
     </footer>
 
     <script>
-        // ===== INICIALIZAÇÃO DOS ÍCONES =====
         lucide.createIcons();
 
-        // ===== FUNDO THREE.JS COM MAIOR VISIBILIDADE E MOVIMENTO HORIZONTAL =====
+        // Three.js background (mesmo código original)
         const canvas = document.getElementById('bg-canvas');
         const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -433,8 +569,7 @@
         const particleGroup = new THREE.Group();
         scene.add(particleGroup);
 
-        // Configuração de partículas: mais partículas e movimento mais rápido
-        const particleCount = Math.min(500, window.innerWidth < 768 ? 220 : 480);
+        const particleCount = Math.min(400, window.innerWidth < 768 ? 180 : 380);
         const radius = 420;
         const positionsArray = new Float32Array(particleCount * 3);
         const velocities = [];
@@ -443,37 +578,32 @@
             positionsArray[i*3] = (Math.random() - 0.5) * radius;
             positionsArray[i*3+1] = (Math.random() - 0.5) * radius;
             positionsArray[i*3+2] = (Math.random() - 0.5) * radius;
-            // Velocidade aumentada para movimento mais dinâmico
             velocities.push({
-                x: (Math.random() - 0.5) * 1.2,
-                y: (Math.random() - 0.5) * 1.2,
-                z: (Math.random() - 0.5) * 1.2
+                x: (Math.random() - 0.5) * 0.8,
+                y: (Math.random() - 0.5) * 0.8,
+                z: (Math.random() - 0.5) * 0.8
             });
         }
 
         const particleGeo = new THREE.BufferGeometry();
         particleGeo.setAttribute('position', new THREE.BufferAttribute(positionsArray, 3));
-        const particleMat = new THREE.PointsMaterial({ color: 0x4cc9f0, size: 1.8, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending });
+        const particleMat = new THREE.PointsMaterial({ color: 0x4cc9f0, size: 1.6, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending });
         const pointsMesh = new THREE.Points(particleGeo, particleMat);
         particleGroup.add(pointsMesh);
 
-        // Linhas de conexão (mais visíveis)
         const linePositions = new Float32Array(particleCount * particleCount * 6);
         const lineColors = new Float32Array(particleCount * particleCount * 6);
         const lineGeo = new THREE.BufferGeometry();
         lineGeo.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
         lineGeo.setAttribute('color', new THREE.BufferAttribute(lineColors, 3));
-        const lineMat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.35 });
+        const lineMat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.2 });
         const lineSegments = new THREE.LineSegments(lineGeo, lineMat);
         particleGroup.add(lineSegments);
 
-        // Movimento horizontal com o mouse (paralaxe)
         let mouseX = 0, mouseY = 0;
-        let targetRotationX = 0, targetRotationY = 0;
         document.addEventListener('mousemove', (e) => {
-            // Movimento horizontal mais pronunciado: mapeia a posição do mouse para rotação
-            targetRotationY = (e.clientX / window.innerWidth - 0.5) * 0.6;
-            targetRotationX = (e.clientY / window.innerHeight - 0.5) * 0.4;
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 0.8;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 0.6;
         });
 
         function animateConnections() {
@@ -512,9 +642,9 @@
         function animate() {
             const positions = particleGeo.attributes.position.array;
             for (let i = 0; i < particleCount; i++) {
-                positions[i*3] += velocities[i].x * 0.45;  // Velocidade de movimento aumentada
-                positions[i*3+1] += velocities[i].y * 0.45;
-                positions[i*3+2] += velocities[i].z * 0.45;
+                positions[i*3] += velocities[i].x * 0.35;
+                positions[i*3+1] += velocities[i].y * 0.35;
+                positions[i*3+2] += velocities[i].z * 0.35;
                 const lim = radius/2;
                 if (Math.abs(positions[i*3]) > lim) velocities[i].x *= -0.98;
                 if (Math.abs(positions[i*3+1]) > lim) velocities[i].y *= -0.98;
@@ -522,45 +652,27 @@
             }
             particleGeo.attributes.position.needsUpdate = true;
             animateConnections();
-
-            // Suavização da rotação para movimento horizontal suave
-            particleGroup.rotation.x += (targetRotationX - particleGroup.rotation.x) * 0.05;
-            particleGroup.rotation.y += (targetRotationY - particleGroup.rotation.y) * 0.05;
-            // Pequena rotação automática para movimento contínuo
-            particleGroup.rotation.z += 0.0005;
-
+            particleGroup.rotation.y += 0.0012;
+            particleGroup.rotation.x += (mouseY * 0.002 - particleGroup.rotation.x) * 0.08;
+            particleGroup.rotation.y += (mouseX * 0.002 - particleGroup.rotation.y) * 0.08;
             renderer.render(scene, camera);
             requestAnimationFrame(animate);
         }
-
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
-
         animate();
 
-        // ===== ANIMAÇÃO DE ENTRADA (FADE-UP) =====
-        const fadeElements = document.querySelectorAll('.fade-up');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-        fadeElements.forEach(el => observer.observe(el));
-
-        // ===== FUNÇÃO WHATSAPP =====
+        // WhatsApp handler
         function handleWhatsApp() {
             const text = "Olá! Gostaria de agendar um diagnóstico estratégico e saber mais sobre os projetos Nexus (app/financeiro).";
             window.open(`https://wa.me/5561999640310?text=${encodeURIComponent(text)}`, '_blank');
         }
         window.handleWhatsApp = handleWhatsApp;
 
-        // ===== SMOOTH SCROLL =====
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -568,6 +680,19 @@
                 if(target) target.scrollIntoView({ behavior: 'smooth' });
             });
         });
+
+        // Intersection Observer para animações de entrada
+        const faders = document.querySelectorAll('.fade-up');
+        const appearOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const appearOnScroll = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    appearOnScroll.unobserve(entry.target);
+                }
+            });
+        }, appearOptions);
+        faders.forEach(fader => appearOnScroll.observe(fader));
     </script>
 </body>
 </html>
