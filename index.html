@@ -401,7 +401,7 @@
         </div>
     </section>
 
-    <!-- NOVA SEÇÃO: CASES DE CLIENTES (bianca_psi e craveiro_adv) -->
+    <!-- NOVA SEÇÃO: CASES DE CLIENTES (biancapsi e craveiroadv - DOMÍNIOS CORRIGIDOS) -->
     <section class="py-28 px-6 bg-black/30">
         <div class="container mx-auto max-w-6xl">
             <div class="text-center mb-16 fade-up">
@@ -413,7 +413,7 @@
                 <p class="text-slate-400 max-w-2xl mx-auto text-lg">Soluções personalizadas que transformaram a presença digital e os resultados de negócios reais.</p>
             </div>
             <div class="grid md:grid-cols-2 gap-10">
-                <!-- Card Bianca Psi -->
+                <!-- Card Bianca Psi (domínio corrigido: biancapsi.nexus-manual.com.br) -->
                 <div class="glass-card p-8 rounded-3xl transition-all hover:scale-[1.02] fade-up">
                     <div class="flex items-center gap-4 mb-6">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center shadow-lg">
@@ -431,12 +431,12 @@
                         <span class="text-xs bg-cyan-500/10 text-cyan-300 px-3 py-1 rounded-full">+210% Leads</span>
                         <span class="text-xs bg-purple-500/10 text-purple-300 px-3 py-1 rounded-full">Agendamento Automático</span>
                     </div>
-                    <a href="http://bianca_psi.nexus-manual.com.br" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition">
+                    <a href="https://biancapsi.nexus-manual.com.br" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition">
                         Visitar site <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
                     </a>
                 </div>
 
-                <!-- Card Craveiro Adv -->
+                <!-- Card Craveiro Adv (domínio corrigido: craveiroadv.nexus-manual.com.br) -->
                 <div class="glass-card p-8 rounded-3xl transition-all hover:scale-[1.02] fade-up">
                     <div class="flex items-center gap-4 mb-6">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg">
@@ -454,7 +454,7 @@
                         <span class="text-xs bg-cyan-500/10 text-cyan-300 px-3 py-1 rounded-full">ROI 4,2x</span>
                         <span class="text-xs bg-purple-500/10 text-purple-300 px-3 py-1 rounded-full">Automação de Contato</span>
                     </div>
-                    <a href="http://craveiro_adv.nexus-manual.com.br" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition">
+                    <a href="https://craveiroadv.nexus-manual.com.br" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition">
                         Visitar site <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
                     </a>
                 </div>
@@ -554,15 +554,15 @@
             © 2025 Nexus Manual - Ecossistema de tecnologia e performance.<br>
             <a href="http://app.nexus-manual.com.br" class="hover:text-cyan-400 transition" target="_blank">app.nexus-manual.com.br</a> | 
             <a href="http://financeiro.nexus-manual.com.br" class="hover:text-cyan-400 transition" target="_blank">financeiro.nexus-manual.com.br</a> | 
-            <a href="http://bianca_psi.nexus-manual.com.br" class="hover:text-cyan-400 transition" target="_blank">bianca_psi.nexus-manual.com.br</a> | 
-            <a href="http://craveiro_adv.nexus-manual.com.br" class="hover:text-cyan-400 transition" target="_blank">craveiro_adv.nexus-manual.com.br</a>
+            <a href="https://biancapsi.nexus-manual.com.br" class="hover:text-cyan-400 transition" target="_blank">biancapsi.nexus-manual.com.br</a> | 
+            <a href="https://craveiroadv.nexus-manual.com.br" class="hover:text-cyan-400 transition" target="_blank">craveiroadv.nexus-manual.com.br</a>
         </p>
     </footer>
 
     <script>
         lucide.createIcons();
 
-        // ========== THREE.JS BACKGROUND - AGORA EM AZUL ==========
+        // ========== THREE.JS BACKGROUND - AZUL ==========
         const canvas = document.getElementById('bg-canvas');
         const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -591,7 +591,6 @@
             });
         }
 
-        // Partículas em azul (0x3366ff)
         const particleGeo = new THREE.BufferGeometry();
         particleGeo.setAttribute('position', new THREE.BufferAttribute(positionsArray, 3));
         const particleMat = new THREE.PointsMaterial({ 
@@ -637,10 +636,9 @@
                         linePositions[idx+4] = positionsAttr[j*3+1];
                         linePositions[idx+5] = positionsAttr[j*3+2];
                         const intensity = 1 - dist / 120;
-                        // Cores em tons de azul
-                        lineColors[idx] = 0.2 + intensity * 0.6;   // R
-                        lineColors[idx+1] = 0.4 + intensity * 0.5; // G
-                        lineColors[idx+2] = 1.0;                   // B
+                        lineColors[idx] = 0.2 + intensity * 0.6;
+                        lineColors[idx+1] = 0.4 + intensity * 0.5;
+                        lineColors[idx+2] = 1.0;
                         lineColors[idx+3] = 0.2 + intensity * 0.6;
                         lineColors[idx+4] = 0.4 + intensity * 0.5;
                         lineColors[idx+5] = 1.0;
@@ -682,10 +680,10 @@
         });
         animate();
 
-        // WhatsApp handler
+        // WhatsApp handler com o número solicitado: 6198377-3112 (código país 55, DDD 61)
         function handleWhatsApp() {
             const text = "Olá! Gostaria de agendar um diagnóstico estratégico e saber mais sobre os projetos Nexus (app/financeiro).";
-            window.open(`https://wa.me/5561999640310?text=${encodeURIComponent(text)}`, '_blank');
+            window.open(`https://wa.me/5561983773112?text=${encodeURIComponent(text)}`, '_blank');
         }
         window.handleWhatsApp = handleWhatsApp;
 
