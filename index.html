@@ -9,6 +9,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
+        /* ===== VARIÁVEIS E RESET ===== */
         :root {
             --nexus-blue: #4cc9f0;
             --nexus-dark: #010101;
@@ -24,20 +25,23 @@
             color: #f1f5f9;
             overflow-x: hidden;
         }
+        /* ===== FUNDO THREE.JS ===== */
         canvas#bg-canvas {
             position: fixed;
             top: 0;
             left: 0;
             z-index: -2;
-            opacity: 0.55;
+            opacity: 0.85; /* Aumentado para mais visibilidade */
             pointer-events: none;
         }
+        /* ===== TEXTOS GRADIENTE ===== */
         .text-gradient {
             background: linear-gradient(125deg, #4cc9f0 0%, #2c7da0 70%, #1f567d 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        /* ===== CARDS COM VIDRO ===== */
         .glass-card {
             background: rgba(12, 18, 28, 0.65);
             backdrop-filter: blur(14px);
@@ -49,6 +53,7 @@
             transform: translateY(-6px);
             box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(76, 201, 240, 0.2);
         }
+        /* ===== BOTÕES ===== */
         .btn-nexus {
             background: linear-gradient(95deg, #4cc9f0, #2c7da0);
             transition: all 0.3s ease;
@@ -58,6 +63,7 @@
             box-shadow: 0 10px 30px -10px #4cc9f0;
             filter: brightness(1.05);
         }
+        /* ===== CARDS DE PROJETOS ===== */
         .project-card {
             background: rgba(8, 12, 22, 0.7);
             backdrop-filter: blur(12px);
@@ -69,7 +75,7 @@
             transform: translateY(-8px);
             box-shadow: 0 20px 35px -15px rgba(76, 201, 240, 0.25);
         }
-        /* Ticker horizontal */
+        /* ===== FAIXA HORIZONTAL (TICKER) ===== */
         .ticker {
             overflow: hidden;
             white-space: nowrap;
@@ -81,7 +87,7 @@
         }
         .ticker-content {
             display: inline-block;
-            animation: scrollTicker 30s linear infinite;
+            animation: scrollTicker 18s linear infinite; /* Mais rápido: 18s */
         }
         .ticker-content span {
             display: inline-block;
@@ -99,7 +105,7 @@
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
-        /* Animações de entrada */
+        /* ===== ANIMAÇÃO DE ENTRADA ===== */
         .fade-up {
             opacity: 0;
             transform: translateY(30px);
@@ -109,6 +115,7 @@
             opacity: 1;
             transform: translateY(0);
         }
+        /* ===== SCROLLBAR ===== */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -119,6 +126,7 @@
             background: #4cc9f0;
             border-radius: 12px;
         }
+        /* ===== RESPONSIVIDADE ===== */
         @media (max-width: 768px) {
             .ticker-content span {
                 font-size: 0.7rem;
@@ -135,9 +143,10 @@
 </head>
 <body>
 
+    <!-- CANVAS PARA FUNDO THREE.JS (PARTÍCULAS) -->
     <canvas id="bg-canvas"></canvas>
 
-    <!-- Navbar -->
+    <!-- ===== NAVBAR ===== -->
     <nav class="fixed w-full z-50 py-4 md:py-5 px-4 md:px-12 flex justify-between items-center bg-black/50 backdrop-blur-xl border-b border-white/5">
         <div class="flex items-center gap-2 md:gap-3">
             <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
@@ -153,7 +162,7 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- ===== HERO SECTION ===== -->
     <section class="relative min-h-screen flex flex-col justify-center items-center px-4 md:px-6 pt-24 pb-16">
         <div class="container mx-auto text-center z-10">
             <div class="inline-flex items-center gap-2 bg-white/5 rounded-full px-3 py-1 md:px-4 md:py-1.5 border border-white/10 mb-6 md:mb-8 backdrop-blur-sm">
@@ -180,7 +189,7 @@
             </div>
         </div>
 
-        <!-- Stats responsivos -->
+        <!-- STATS -->
         <div class="container mx-auto mt-16 md:mt-28 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 z-10 px-4">
             <div class="text-center glass-card py-3 md:py-5 rounded-2xl">
                 <div class="text-xl md:text-3xl font-extrabold text-cyan-400 mb-1 stat-number">+1.2M</div>
@@ -201,7 +210,7 @@
         </div>
     </section>
 
-    <!-- Barra horizontal com movimento (ticker atualizada) -->
+    <!-- ===== FAIXA HORIZONTAL (TICKER) ===== -->
     <div class="ticker">
         <div class="ticker-content">
             <span><i data-lucide="facebook" class="inline w-4 h-4"></i> Meta Ads</span>
@@ -209,7 +218,7 @@
             <span><i data-lucide="layout-template" class="inline w-4 h-4"></i> Landing Page</span>
             <span><i data-lucide="bar-chart-2" class="inline w-4 h-4"></i> Análise de Dados</span>
             <span><i data-lucide="dashboard" class="inline w-4 h-4"></i> Dashboard</span>
-            <!-- Duplicação para efeito contínuo -->
+            <!-- Duplicação para loop infinito -->
             <span><i data-lucide="facebook" class="inline w-4 h-4"></i> Meta Ads</span>
             <span><i data-lucide="google" class="inline w-4 h-4"></i> Google Ads</span>
             <span><i data-lucide="layout-template" class="inline w-4 h-4"></i> Landing Page</span>
@@ -218,7 +227,7 @@
         </div>
     </div>
 
-    <!-- SEÇÃO DE PROJETOS (com os dois domínios específicos + 5 placeholders) -->
+    <!-- ===== SEÇÃO DE PROJETOS ===== -->
     <section id="projetos" class="py-16 md:py-28 px-4 md:px-6 relative">
         <div class="container mx-auto max-w-6xl">
             <div class="text-center mb-12 md:mb-16 fade-up">
@@ -283,7 +292,7 @@
                     </div>
                 </div>
 
-                <!-- Cards placeholder (3 a 7) - mantidos com cores azul/ciano -->
+                <!-- Cards placeholder (3 a 7) -->
                 <div class="project-card rounded-2xl md:rounded-3xl overflow-hidden fade-up">
                     <div class="p-5 md:p-6">
                         <div class="flex items-center justify-between mb-4">
@@ -379,7 +388,7 @@
         </div>
     </section>
 
-    <!-- CTA Final -->
+    <!-- ===== CTA FINAL ===== -->
     <section id="contato" class="py-16 md:py-32 px-4 md:px-6">
         <div class="container mx-auto max-w-5xl text-center">
             <div class="glass-card p-8 md:p-12 lg:p-20 rounded-3xl md:rounded-[3rem] border-white/10 shadow-2xl fade-up">
@@ -396,6 +405,7 @@
         </div>
     </section>
 
+    <!-- ===== RODAPÉ ===== -->
     <footer class="py-8 md:py-12 border-t border-white/5 text-center">
         <div class="opacity-50 text-[10px] md:text-sm tracking-widest uppercase mb-2 md:mb-3">NEXUS MANUAL — INNOVATION & REVENUE</div>
         <div class="flex justify-center gap-6 md:gap-8 mb-4 md:mb-6">
@@ -407,9 +417,10 @@
     </footer>
 
     <script>
+        // ===== INICIALIZAÇÃO DOS ÍCONES =====
         lucide.createIcons();
 
-        // Three.js background (código mantido igual)
+        // ===== FUNDO THREE.JS COM MAIOR VISIBILIDADE E MOVIMENTO HORIZONTAL =====
         const canvas = document.getElementById('bg-canvas');
         const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -422,7 +433,8 @@
         const particleGroup = new THREE.Group();
         scene.add(particleGroup);
 
-        const particleCount = Math.min(400, window.innerWidth < 768 ? 180 : 380);
+        // Configuração de partículas: mais partículas e movimento mais rápido
+        const particleCount = Math.min(500, window.innerWidth < 768 ? 220 : 480);
         const radius = 420;
         const positionsArray = new Float32Array(particleCount * 3);
         const velocities = [];
@@ -431,32 +443,37 @@
             positionsArray[i*3] = (Math.random() - 0.5) * radius;
             positionsArray[i*3+1] = (Math.random() - 0.5) * radius;
             positionsArray[i*3+2] = (Math.random() - 0.5) * radius;
+            // Velocidade aumentada para movimento mais dinâmico
             velocities.push({
-                x: (Math.random() - 0.5) * 0.8,
-                y: (Math.random() - 0.5) * 0.8,
-                z: (Math.random() - 0.5) * 0.8
+                x: (Math.random() - 0.5) * 1.2,
+                y: (Math.random() - 0.5) * 1.2,
+                z: (Math.random() - 0.5) * 1.2
             });
         }
 
         const particleGeo = new THREE.BufferGeometry();
         particleGeo.setAttribute('position', new THREE.BufferAttribute(positionsArray, 3));
-        const particleMat = new THREE.PointsMaterial({ color: 0x4cc9f0, size: 1.6, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending });
+        const particleMat = new THREE.PointsMaterial({ color: 0x4cc9f0, size: 1.8, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending });
         const pointsMesh = new THREE.Points(particleGeo, particleMat);
         particleGroup.add(pointsMesh);
 
+        // Linhas de conexão (mais visíveis)
         const linePositions = new Float32Array(particleCount * particleCount * 6);
         const lineColors = new Float32Array(particleCount * particleCount * 6);
         const lineGeo = new THREE.BufferGeometry();
         lineGeo.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
         lineGeo.setAttribute('color', new THREE.BufferAttribute(lineColors, 3));
-        const lineMat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.2 });
+        const lineMat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.35 });
         const lineSegments = new THREE.LineSegments(lineGeo, lineMat);
         particleGroup.add(lineSegments);
 
+        // Movimento horizontal com o mouse (paralaxe)
         let mouseX = 0, mouseY = 0;
+        let targetRotationX = 0, targetRotationY = 0;
         document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX / window.innerWidth - 0.5) * 0.8;
-            mouseY = (e.clientY / window.innerHeight - 0.5) * 0.6;
+            // Movimento horizontal mais pronunciado: mapeia a posição do mouse para rotação
+            targetRotationY = (e.clientX / window.innerWidth - 0.5) * 0.6;
+            targetRotationX = (e.clientY / window.innerHeight - 0.5) * 0.4;
         });
 
         function animateConnections() {
@@ -495,9 +512,9 @@
         function animate() {
             const positions = particleGeo.attributes.position.array;
             for (let i = 0; i < particleCount; i++) {
-                positions[i*3] += velocities[i].x * 0.35;
-                positions[i*3+1] += velocities[i].y * 0.35;
-                positions[i*3+2] += velocities[i].z * 0.35;
+                positions[i*3] += velocities[i].x * 0.45;  // Velocidade de movimento aumentada
+                positions[i*3+1] += velocities[i].y * 0.45;
+                positions[i*3+2] += velocities[i].z * 0.45;
                 const lim = radius/2;
                 if (Math.abs(positions[i*3]) > lim) velocities[i].x *= -0.98;
                 if (Math.abs(positions[i*3+1]) > lim) velocities[i].y *= -0.98;
@@ -505,20 +522,26 @@
             }
             particleGeo.attributes.position.needsUpdate = true;
             animateConnections();
-            particleGroup.rotation.y += 0.0012;
-            particleGroup.rotation.x += (mouseY * 0.002 - particleGroup.rotation.x) * 0.08;
-            particleGroup.rotation.y += (mouseX * 0.002 - particleGroup.rotation.y) * 0.08;
+
+            // Suavização da rotação para movimento horizontal suave
+            particleGroup.rotation.x += (targetRotationX - particleGroup.rotation.x) * 0.05;
+            particleGroup.rotation.y += (targetRotationY - particleGroup.rotation.y) * 0.05;
+            // Pequena rotação automática para movimento contínuo
+            particleGroup.rotation.z += 0.0005;
+
             renderer.render(scene, camera);
             requestAnimationFrame(animate);
         }
+
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
+
         animate();
 
-        // Animação de entrada
+        // ===== ANIMAÇÃO DE ENTRADA (FADE-UP) =====
         const fadeElements = document.querySelectorAll('.fade-up');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -530,12 +553,14 @@
         }, { threshold: 0.1 });
         fadeElements.forEach(el => observer.observe(el));
 
+        // ===== FUNÇÃO WHATSAPP =====
         function handleWhatsApp() {
             const text = "Olá! Gostaria de agendar um diagnóstico estratégico e saber mais sobre os projetos Nexus (app/financeiro).";
             window.open(`https://wa.me/5561999640310?text=${encodeURIComponent(text)}`, '_blank');
         }
         window.handleWhatsApp = handleWhatsApp;
 
+        // ===== SMOOTH SCROLL =====
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
