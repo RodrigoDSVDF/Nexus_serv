@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Manual | Inteligência em Vendas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Three.js para o efeito de fundo -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --nexus-blue: #4cc9f0;
+            --nexus-purple: #7209b7;
+            --nexus-dark: #02040a;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--nexus-dark);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        canvas#bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.6;
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #4cc9f0, #4895ef, #7209b7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass-card {
+            background: rgba(10, 15, 25, 0.7);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(76, 201, 240, 0.3);
+            box-shadow: 0 0 30px rgba(76, 201, 240, 0.1);
+        }
+        .hero-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            height: 80vh;
+            background: radial-gradient(circle, rgba(76, 201, 240, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .btn-nexus {
+            background: linear-gradient(90deg, #4cc9f0, #7209b7);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .btn-nexus::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, #7209b7, #4cc9f0);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        .btn-nexus:hover::before {
+            opacity: 1;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #02040a; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <!-- Fundo Animado Three.js -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 py-6 px-6 md:px-12 flex justify-between items-center bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full border-2 border-cyan-400 flex items-center justify-center">
+                <i data-lucide="share-2" class="w-5 h-5 text-cyan-400"></i>
+            </div>
+            <span class="text-2xl font-bold tracking-tighter">NEXUS <span class="font-light opacity-60">MANUAL</span></span>
+        </div>
+        <a href="#contato" class="hidden md:block text-sm font-semibold border border-cyan-500/50 hover:bg-cyan-500/10 px-6 py-2 rounded-full transition-all">
+            Área do Cliente
+        </a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex flex-col justify-center items-center px-6 pt-20">
+        <div class="hero-glow"></div>
+        <div class="container mx-auto text-center z-10">
+            <h1 class="text-5xl md:text-8xl font-extrabold mb-8 tracking-tight leading-[1.1]">
+                O Manual do seu <br>
+                <span class="text-gradient">Sucesso Digital</span>
+            </h1>
+            <p class="text-lg md:text-2xl text-slate-300 mb-12 max-w-3xl mx-auto font-light leading-relaxed">
+                Não somos apenas uma agência. Somos a tecnologia que conecta seu negócio a clientes qualificados, usando dados, psicologia e design de elite.
+            </p>
+            <div class="flex flex-col md:flex-row gap-6 justify-center">
+                <button onclick="window.location.href='#contato'" class="btn-nexus px-10 py-5 rounded-full font-bold text-lg shadow-2xl shadow-cyan-500/20 flex items-center justify-center gap-2 group transition-all">
+                    INICIAR TRANSFORMAÇÃO
+                    <i data-lucide="zap" class="w-5 h-5 group-hover:fill-current"></i>
+                </button>
+                <button class="px-10 py-5 rounded-full font-bold text-lg border border-white/10 hover:bg-white/5 backdrop-blur-md transition-all">
+                    Ver Resultados
+                </button>
+            </div>
+        </div>
+        
+        <!-- Stats -->
+        <div class="container mx-auto mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 z-10 px-6">
+            <div class="text-center">
+                <div class="text-3xl font-bold text-cyan-400 mb-1">+1M</div>
+                <div class="text-xs uppercase tracking-widest text-slate-500">Leads Gerados</div>
+            </div>
+            <div class="text-center">
+                <div class="text-3xl font-bold text-purple-500 mb-1">R$ 5M+</div>
+                <div class="text-xs uppercase tracking-widest text-slate-500">Gerido em Ads</div>
+            </div>
+            <div class="text-center">
+                <div class="text-3xl font-bold text-cyan-400 mb-1">98%</div>
+                <div class="text-xs uppercase tracking-widest text-slate-500">Satisfação</div>
+            </div>
+            <div class="text-center">
+                <div class="text-3xl font-bold text-purple-500 mb-1">24/7</div>
+                <div class="text-xs uppercase tracking-widest text-slate-500">Suporte Ativo</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problema -->
+    <section class="py-32 px-6">
+        <div class="container mx-auto max-w-6xl">
+            <div class="grid md:grid-cols-2 gap-20 items-center">
+                <div>
+                    <h2 class="text-4xl md:text-6xl font-bold mb-8 leading-tight">
+                        Por que o seu digital <br> <span class="opacity-30">está travado?</span>
+                    </h2>
+                    <div class="space-y-8">
+                        <div class="flex gap-6">
+                            <div class="shrink-0 w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center">
+                                <i data-lucide="eye-off" class="text-red-500"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold mb-2">Invisibilidade Estratégica</h4>
+                                <p class="text-slate-400">Postar conteúdo não é vender. Se o seu anúncio não atinge quem tem o dinheiro na mão, você está sendo invisível.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="shrink-0 w-12 h-12 rounded-2xl bg-orange-500/10 flex items-center justify-center">
+                                <i data-lucide="database" class="text-orange-500"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold mb-2">Decisões no "Achismo"</h4>
+                                <p class="text-slate-400">Sem rastreio de dados, você nunca saberá qual campanha realmente deu lucro e qual apenas queimou caixa.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card rounded-[2.5rem] p-12 border-cyan-500/20 relative">
+                    <i data-lucide="quote" class="absolute -top-6 -left-6 w-16 h-16 text-cyan-500/20"></i>
+                    <p class="text-2xl font-light italic leading-relaxed text-slate-300">
+                        "Enquanto muitos vendem sites bonitos, a Nexus Manual constrói sistemas de lucro. A tecnologia serve ao negócio, e não o contrário."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Serviços -->
+    <section class="py-20 px-6 bg-slate-900/20">
+        <div class="container mx-auto">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl font-bold mb-4">Soluções <span class="text-cyan-400">Nexus</span></h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-cyan-400 to-purple-500 mx-auto"></div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-10">
+                <div class="glass-card p-10 rounded-3xl relative overflow-hidden group">
+                    <div class="absolute -right-8 -top-8 w-24 h-24 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-all"></div>
+                    <i data-lucide="layout-template" class="w-12 h-12 text-cyan-400 mb-6"></i>
+                    <h3 class="text-2xl font-bold mb-4">Páginas de Alta Conversão</h3>
+                    <p class="text-slate-400 mb-8">Landing Pages desenhadas para converter visitantes em leads em segundos. Código limpo e velocidade extrema.</p>
+                </div>
+                <div class="glass-card p-10 rounded-3xl relative overflow-hidden group border-cyan-500/30">
+                    <div class="absolute -right-8 -top-8 w-24 h-24 bg-purple-500/10 rounded-full blur-2xl"></div>
+                    <i data-lucide="target" class="w-12 h-12 text-purple-500 mb-6"></i>
+                    <h3 class="text-2xl font-bold mb-4">Tráfego de Performance</h3>
+                    <p class="text-slate-400 mb-8">Facebook, Google e Instagram Ads focados em Retorno sobre Investimento (ROI). Escala sustentável.</p>
+                </div>
+                <div class="glass-card p-10 rounded-3xl relative overflow-hidden group">
+                    <div class="absolute -right-8 -top-8 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl"></div>
+                    <i data-lucide="bar-chart-3" class="w-12 h-12 text-blue-400 mb-6"></i>
+                    <h3 class="text-2xl font-bold mb-4">Consultoria de Dados</h3>
+                    <p class="text-slate-400 mb-8">Configuramos toda a inteligência de rastreio (GA4, API de Conversão) para você não perder nenhum dado.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section id="contato" class="py-32 px-6">
+        <div class="container mx-auto max-w-5xl text-center">
+            <div class="glass-card p-12 md:p-24 rounded-[3rem] border-white/5">
+                <h2 class="text-4xl md:text-6xl font-black mb-8 leading-tight">Chegou a hora de ser <br> <span class="text-gradient">Referência.</span></h2>
+                <p class="text-xl text-slate-400 mb-12">Fale conosco agora e receba um diagnóstico técnico do seu posicionamento digital.</p>
+                <button onclick="handleWhatsApp()" class="btn-nexus px-12 py-6 rounded-full font-black text-xl shadow-cyan-500/20 flex items-center justify-center gap-3 mx-auto">
+                    <i data-lucide="message-square" class="w-6 h-6"></i> CHUTAR O BALDE NO WHATSAPP
+                </button>
+                <p class="mt-8 text-slate-500 text-sm flex items-center justify-center gap-2">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-cyan-500"></i> Seus dados estão 100% seguros conosco.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-12 border-t border-white/5 text-center">
+        <div class="opacity-40 text-sm tracking-widest uppercase mb-4">NEXUS MANUAL © 2024</div>
+        <div class="flex justify-center gap-6 mb-8">
+            <a href="#" class="hover:text-cyan-400 transition"><i data-lucide="instagram"></i></a>
+            <a href="#" class="hover:text-cyan-400 transition"><i data-lucide="linkedin"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        // Inicializar ícones
+        lucide.createIcons();
+
+        // 1. EFEITO DE FUNDO THREE.JS (PLEXUS SPHERE)
+        const canvas = document.getElementById('bg-canvas');
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 250;
+
+        const group = new THREE.Group();
+        scene.add(group);
+
+        const particlesData = [];
+        const maxParticleCount = 400;
+        let particleCount = window.innerWidth < 768 ? 150 : 350;
+        const r = 400;
+        const rHalf = r / 2;
+
+        const segments = maxParticleCount * maxParticleCount;
+        const positions = new Float32Array(segments * 3);
+        const colors = new Float32Array(segments * 3);
+
+        const pMaterial = new THREE.PointsMaterial({
+            color: 0x4cc9f0,
+            size: 2,
+            blending: THREE.AdditiveBlending,
+            transparent: true,
+            sizeAttenuation: false
+        });
+
+        const particles = new THREE.BufferGeometry();
+        const particlePositions = new Float32Array(maxParticleCount * 3);
+
+        for (let i = 0; i < maxParticleCount; i++) {
+            const x = Math.random() * r - r / 2;
+            const y = Math.random() * r - r / 2;
+            const z = Math.random() * r - r / 2;
+
+            particlePositions[i * 3] = x;
+            particlePositions[i * 3 + 1] = y;
+            particlePositions[i * 3 + 2] = z;
+
+            particlesData.push({
+                velocity: new THREE.Vector3(-1 + Math.random() * 2, -1 + Math.random() * 2, -1 + Math.random() * 2),
+                numConnections: 0
+            });
+        }
+
+        particles.setDrawRange(0, particleCount);
+        particles.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3).setUsage(THREE.DynamicDrawUsage));
+
+        const pointCloud = new THREE.Points(particles, pMaterial);
+        group.add(pointCloud);
+
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3).setUsage(THREE.DynamicDrawUsage));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3).setUsage(THREE.DynamicDrawUsage));
+        geometry.computeBoundingSphere();
+        geometry.setDrawRange(0, 0);
+
+        const material = new THREE.LineBasicMaterial({
+            vertexColors: true,
+            blending: THREE.AdditiveBlending,
+            transparent: true,
+            opacity: 0.4
+        });
+
+        const linesMesh = new THREE.LineSegments(geometry, material);
+        group.add(linesMesh);
+
+        // Mouse interaction
+        let mouseX = 0, mouseY = 0;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX - window.innerWidth / 2) * 0.05;
+            mouseY = (e.clientY - window.innerHeight / 2) * 0.05;
+        });
+
+        function animate() {
+            let vertexpos = 0;
+            let colorpos = 0;
+            let numConnected = 0;
+
+            for (let i = 0; i < particleCount; i++) particlesData[i].numConnections = 0;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particleData = particlesData[i];
+                particlePositions[i * 3] += particleData.velocity.x * 0.2;
+                particlePositions[i * 3 + 1] += particleData.velocity.y * 0.2;
+                particlePositions[i * 3 + 2] += particleData.velocity.z * 0.2;
+
+                if (particlePositions[i * 3 + 1] < -rHalf || particlePositions[i * 3 + 1] > rHalf) particleData.velocity.y = -particleData.velocity.y;
+                if (particlePositions[i * 3] < -rHalf || particlePositions[i * 3] > rHalf) particleData.velocity.x = -particleData.velocity.x;
+                if (particlePositions[i * 3 + 2] < -rHalf || particlePositions[i * 3 + 2] > rHalf) particleData.velocity.z = -particleData.velocity.z;
+
+                for (let j = i + 1; j < particleCount; j++) {
+                    const particleDataB = particlesData[j];
+                    const dx = particlePositions[i * 3] - particlePositions[j * 3];
+                    const dy = particlePositions[i * 3 + 1] - particlePositions[j * 3 + 1];
+                    const dz = particlePositions[i * 3 + 2] - particlePositions[j * 3 + 2];
+                    const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+                    if (dist < 80) {
+                        particleData.numConnections++;
+                        particleDataB.numConnections++;
+                        const alpha = 1.0 - dist / 80;
+                        positions[vertexpos++] = particlePositions[i * 3];
+                        positions[vertexpos++] = particlePositions[i * 3 + 1];
+                        positions[vertexpos++] = particlePositions[i * 3 + 2];
+                        positions[vertexpos++] = particlePositions[j * 3];
+                        positions[vertexpos++] = particlePositions[j * 3 + 1];
+                        positions[vertexpos++] = particlePositions[j * 3 + 2];
+
+                        // Gradient color for lines (Blue to Purple)
+                        colors[colorpos++] = 0.3; colors[colorpos++] = 0.7; colors[colorpos++] = 0.9;
+                        colors[colorpos++] = 0.4; colors[colorpos++] = 0.1; colors[colorpos++] = 0.7;
+                        numConnected++;
+                    }
+                }
+            }
+
+            linesMesh.geometry.setDrawRange(0, numConnected * 2);
+            linesMesh.geometry.attributes.position.needsUpdate = true;
+            linesMesh.geometry.attributes.color.needsUpdate = true;
+            pointCloud.geometry.attributes.position.needsUpdate = true;
+
+            group.rotation.y += 0.001;
+            group.rotation.x += (mouseY * 0.001 - group.rotation.x) * 0.1;
+            group.rotation.y += (mouseX * 0.001 - group.rotation.y) * 0.1;
+
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+
+        // 2. WHATSAPP HANDLER
+        function handleWhatsApp() {
+            const text = "Olá! Vim através do site e gostaria de saber mais sobre como a Nexus Manual pode ajudar o meu negócio digital.";
+            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        // 3. SMOOTH SCROLL
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
